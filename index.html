@@ -3,52 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Character Sheet Prompt Builder</title>
+<title>Prompt Builder</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#121212;color:#eee;font-family:Arial,sans-serif}main{max-width:1000px;margin:auto;padding:24px}h1{margin-top:0;color:#f0b35b}h2{font-size:18px;color:#f0b35b;border-bottom:1px solid #444;padding-bottom:8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:#ccc}input,textarea,select{width:100%;padding:10px;border:1px solid #555;border-radius:7px;background:#202020;color:#fff;font-size:14px}textarea{min-height:80px;resize:vertical}.wide{grid-column:1/-1}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}button{border:0;border-radius:7px;padding:11px 16px;cursor:pointer;background:#f0b35b;color:#171717;font-weight:bold}button.secondary{background:#333;color:#fff}#output{min-height:500px;font-family:Consolas,monospace;line-height:1.45}.hint{color:#aaa;font-size:13px;margin-top:-5px}
+*{box-sizing:border-box}
+body{margin:0;background:#121212;color:#eee;font-family:Arial,sans-serif}
+main{max-width:1000px;margin:auto;padding:24px}
+h1{margin:0;color:#f0b35b}
+h2{font-size:18px;color:#f0b35b;border-bottom:1px solid #444;padding-bottom:8px;margin-top:26px}
+.hint{color:#aaa;font-size:13px;margin:8px 0 18px}
+.tabs{display:flex;gap:8px;margin:20px 0}
+.tab{border:1px solid #555;border-radius:7px;padding:10px 14px;cursor:pointer;background:#333;color:#fff;font-weight:bold}
+.tab.active{background:#f0b35b;color:#171717;border-color:#f0b35b}
+.panel{display:none}
+.panel.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:#ccc}
+input,textarea,select{width:100%;padding:10px;border:1px solid #555;border-radius:7px;background:#202020;color:#fff;font-size:14px}
+textarea{min-height:80px;resize:vertical}
+.wide{grid-column:1/-1}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+button{border:0;border-radius:7px;padding:11px 16px;cursor:pointer;background:#f0b35b;color:#171717;font-weight:bold}
+button.secondary{background:#333;color:#fff}
+.output{min-height:430px;font-family:Consolas,monospace;line-height:1.45}
+footer{text-align:center;margin:26px 0 8px;font-size:13px}
+footer a{color:#aaa;text-decoration:none}
+footer a:hover{color:#f0b35b}
 </style>
 </head>
+
 <body>
 <main>
-<h1>Character Sheet Prompt Builder</h1>
-<p class="hint">Formu doldur, “Prompt oluştur” düğmesine bas. Özel isim ve boy gibi bilgiler her seferinde otomatik sorulur.</p>
+<h1>Prompt Builder</h1>
+<p class="hint">Formu doldur, “Prompt oluştur” düğmesine bas, sonucu kopyala.</p>
 
-<h2>1. Karakter bilgileri</h2>
-<div class="grid">
-<label>Karakter adı / özel isim<input id="name" placeholder="Örn: Mert"></label>
-<label>Meslek veya konsept<input id="concept" placeholder="Örn: Adana arabesk rap sanatçısı"></label>
-<label>Yaş aralığı<input id="age" placeholder="Örn: young adult"></label>
-<label>Cinsiyet / karakter tipi<input id="gender" placeholder="Örn: young adult male"></label>
-<label>Vücut tipi<input id="body" placeholder="Örn: realistic slim-to-average body type"></label>
-<label>Boy (cm)<input id="height" type="number" placeholder="Örn: 190"></label>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('character',this)">Character Sheet</button>
+  <button class="tab" onclick="showTab('flatlay',this)">Flat Lay Clothing</button>
 </div>
 
-<h2>2. Görünüm ve kıyafet</h2>
-<div class="grid">
-<label class="wide">Kıyafet ve genel tarz<textarea id="wardrobe">fitted black or charcoal t-shirt, dark straight-leg jeans, clean black sneakers, simple silver chain and a discreet ring</textarea></label>
-<label>Aksesuarlar<input id="accessories" placeholder="Örn: simple silver chain"></label>
-<label>İstenmeyen öğeler<input id="negative" value="sportswear, football jersey, weapons, instruments, exaggerated jewellery, logos, watermarks"></label>
-</div>
+<section id="character" class="panel active">
+  <h2>1. Karakter bilgileri</h2>
+  <div class="grid">
+    <label>Karakter adı / özel isim<input id="name" placeholder="Örn: Mert"></label>
+    <label>Meslek veya konsept<input id="concept" placeholder="Örn: Adana arabesk rap sanatçısı"></label>
+    <label>Yaş aralığı<input id="age" placeholder="Örn: young adult"></label>
+    <label>Cinsiyet / karakter tipi<input id="gender" placeholder="Örn: young adult male"></label>
+    <label>Vücut tipi<input id="body" placeholder="Örn: realistic slim-to-average body type"></label>
+    <label>Boy (cm)<input id="height" type="number" placeholder="Örn: 190"></label>
+  </div>
 
-<h2>3. Arka plan ve çıktı</h2>
-<div class="grid">
-<label>Arka plan rengi<input id="bg" value="mid-grey"></label>
-<label>HEX renk kodu<input id="hex" value="#8A8A8A"></label>
-<label>Kompozisyon<input id="ratio" value="4:5 vertical"></label>
-<label>Referans fotoğrafı kullanılacak mı?<select id="photo"><option value="yes">Evet</option><option value="no">Hayır</option></select></label>
-</div>
+  <h2>2. Görünüm ve kıyafet</h2>
+  <div class="grid">
+    <label class="wide">Kıyafet ve genel tarz<textarea id="wardrobe">fitted black or charcoal t-shirt, dark straight-leg jeans, clean black sneakers, simple silver chain and a discreet ring</textarea></label>
+    <label>Aksesuarlar<input id="accessories" placeholder="Örn: simple silver chain"></label>
+    <label>İstenmeyen öğeler<input id="negative" value="sportswear, football jersey, weapons, instruments, exaggerated jewellery, logos, watermarks"></label>
+  </div>
 
-<div class="buttons"><button onclick="build()">Prompt oluştur</button><button class="secondary" onclick="copyPrompt()">Kopyala</button><button class="secondary" onclick="clearAll()">Temizle</button></div>
-<textarea id="output" placeholder="Oluşturulan prompt burada görünecek..."></textarea>
+  <h2>3. Arka plan ve çıktı</h2>
+  <div class="grid">
+    <label>Arka plan rengi<input id="bg" value="mid-grey"></label>
+    <label>HEX renk kodu<input id="hex" value="#8A8A8A"></label>
+    <label>Kompozisyon<input id="ratio" value="4:5 vertical"></label>
+    <label>Referans fotoğrafı kullanılacak mı?<select id="photo"><option value="yes">Evet</option><option value="no">Hayır</option></select></label>
+  </div>
+
+  <div class="buttons">
+    <button onclick="buildCharacter()">Prompt oluştur</button>
+    <button class="secondary" onclick="copyText('characterOutput')">Kopyala</button>
+    <button class="secondary" onclick="clearCharacter()">Temizle</button>
+  </div>
+  <textarea id="characterOutput" class="output" placeholder="Oluşturulan character sheet promptu burada görünecek..."></textarea>
+</section>
+
+<section id="flatlay" class="panel">
+  <h2>1. Giysi bilgileri</h2>
+  <div class="grid">
+    <label class="wide">Giysiler<textarea id="clothes" placeholder="Örn: siyah deri ceket, koyu gri tişört, siyah kot pantolon ve siyah sneaker"></textarea></label>
+    <label>Stil / konsept<input id="clothingStyle" placeholder="Örn: understated arabesk rap street style"></label>
+    <label>Renk ve kumaş ayrıntıları<input id="fabric" placeholder="Örn: matte black leather, washed denim, soft cotton"></label>
+    <label>Aksesuarlar<input id="flatAccessories" placeholder="Örn: gold chain, silver ring, black belt"></label>
+  </div>
+
+  <h2>2. Sunum</h2>
+  <div class="grid">
+    <label>Arka plan rengi<input id="flatBg" value="mid-grey"></label>
+    <label>HEX renk kodu<input id="flatHex" value="#8A8A8A"></label>
+    <label>Kompozisyon<input id="flatRatio" value="4:5 vertical"></label>
+    <label class="wide">İstenmeyen öğeler<input id="flatNegative" value="person, model, mannequin, body, head, face, hands, arms, legs, feet, hanger, clothing rack, text, logo, watermark"></label>
+  </div>
+
+  <div class="buttons">
+    <button onclick="buildFlatLay()">Prompt oluştur</button>
+    <button class="secondary" onclick="copyText('flatOutput')">Kopyala</button>
+    <button class="secondary" onclick="clearFlatLay()">Temizle</button>
+  </div>
+  <textarea id="flatOutput" class="output" placeholder="Oluşturulan flat lay clothing promptu burada görünecek..."></textarea>
+</section>
+
+<footer>
+  <a href="https://github.com/ilkclub" target="_blank" rel="noopener noreferrer">ilkclub</a>
+</footer>
 </main>
+
 <script>
 const $=id=>document.getElementById(id);
-function v(id){return $(id).value.trim()}
-function build(){
- const ref=v('photo')==='yes'?'the person in the uploaded photograph':'the described character';
- const name=v('name')||'the subject'; const height=v('height');
- const ruler=height?`Place a vertical centimetre height ruler from 0 to ${height} cm along the far left edge of Band 1. Align it with the feet and the base-of-neck crop line.`:'Do not include a height ruler.';
- const p=`Professional photorealistic character reference sheet of ${ref}, reimagined as “${name}”, a ${v('concept')||'realistic fictional character'}.
+const v=id=>$(id).value.trim();
+
+function showTab(id,button){
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  $(id).classList.add('active');
+  button.classList.add('active');
+}
+
+function copyText(id){
+  if(!$(id).value)return;
+  navigator.clipboard.writeText($(id).value);
+}
+
+function clearCharacter(){
+  ['name','concept','age','gender','body','height','wardrobe','accessories','negative','bg','hex','ratio','characterOutput'].forEach(id=>$(id).value='');
+  $('photo').value='yes';
+}
+
+function clearFlatLay(){
+  ['clothes','clothingStyle','fabric','flatAccessories','flatBg','flatHex','flatRatio','flatNegative','flatOutput'].forEach(id=>$(id).value='');
+}
+
+function buildCharacter(){
+  const ref=v('photo')==='yes'?'the person in the uploaded photograph':'the described character';
+  const name=v('name')||'the subject';
+  const height=v('height');
+  const ruler=height
+    ?`Place a vertical centimetre height ruler from 0 to ${height} cm along the far left edge of Band 1. Align it with the feet and the base-of-neck crop line.`
+    :'Do not include a height ruler.';
+
+  $('characterOutput').value=`Professional photorealistic character reference sheet of ${ref}, reimagined as “${name}”, a ${v('concept')||'realistic fictional character'}.
 
 IDENTITY LOCK:
 Preserve the subject’s exact recognizable identity in all portrait panels: same face, bone structure, eyes, nose, lips, skin tone, hairstyle, apparent age and facial proportions. The subject must clearly look like the same person in every panel where the head is visible.
@@ -98,11 +188,23 @@ TEXT AND LABELS:
 Use clean small professional labels above each panel: FRONT, FRONT THREE-QUARTER, LEFT SIDE, BACK, REAR THREE-QUARTER, TOP-DOWN BODY VIEW, NEUTRAL, SLIGHT INTENSITY, DEADPAN, PROFILE, KEY FROM LEFT and KEY FROM RIGHT.
 
 Do not add extra people, duplicate limbs, extra fingers, distorted anatomy or extra body parts. High-detail photorealistic character-design reference sheet, realistic studio photography, consistent proportions, clean layout, ${v('ratio')||'4:5 vertical'} composition.`;
- $('output').value=p;
 }
-function copyPrompt(){if(!$('output').value)build();navigator.clipboard.writeText($('output').value);}
-function clearAll(){document.querySelectorAll('input,textarea').forEach(x=>{if(x.id!=='output')x.value=''});$('output').value='';}
+
+function buildFlatLay(){
+  $('flatOutput').value=`Professional photorealistic flat lay clothing display of ${v('clothes')||'a complete coordinated outfit'}.
+
+Arrange every garment neatly on an identical flat seamless ${v('flatBg')||'mid-grey'} studio background, exact color ${v('flatHex')||'#8A8A8A'}, viewed directly from above.
+
+Style and concept: ${v('clothingStyle')||'clean contemporary fashion styling'}.
+Colours and materials: ${v('fabric')||'realistic fabric texture and material detail'}.
+Accessories: ${v('flatAccessories')||'none'}.
+
+Create an authentic fashion catalog presentation. Keep every garment fully visible, evenly spaced and naturally arranged. Show realistic fabric texture, precise folds, stitching, seams, zippers, buttons and subtle realistic shadows. Clean sharp studio product photography, no colour grading.
+
+NO ${v('flatNegative')||'person, model, mannequin, body, head, face, hands, arms, legs, feet, hanger, clothing rack, text, logo, watermark'}.
+
+High-detail realistic flat lay fashion product shot, direct overhead camera angle, clean composition, ${v('flatRatio')||'4:5 vertical'} composition.`;
+}
 </script>
-<div style="text-align:center; margin:24px 0 8px;">
-  <a href="https://github.com/ilkclub" target="_blank" rel="noopener noreferrer">ilkclub</a>
-</div></body></html>
+</body>
+</html>
