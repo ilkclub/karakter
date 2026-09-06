@@ -76,7 +76,18 @@ footer a:hover{color:#f0b35b}
 </section>
 
 <section id="flatlay" class="panel">
-  <h2>1. Giysi bilgileri</h2>
+  <h2>1. Giysi bilgileri</h2><div class="grid">
+  <label>Referans karakter / sheet kullanılacak mı?
+    <select id="flatReference">
+      <option value="yes">Evet — görsel üretim aracına character sheet yükleyeceğim</option>
+      <option value="no">Hayır — yalnızca tarif ile oluşturacağım</option>
+    </select>
+  </label>
+
+  <label>Karakter için kısa not (isteğe bağlı)
+    <input id="flatCharacterNote" placeholder="Örn: Mert, arabesk rap sanatçısı">
+  </label>
+</div>
   <div class="grid">
     <label class="wide">Giysiler<textarea id="clothes" placeholder="Örn: siyah deri ceket, koyu gri tişört, siyah kot pantolon ve siyah sneaker"></textarea></label>
     <label>Stil / konsept<input id="clothingStyle" placeholder="Örn: understated arabesk rap street style"></label>
@@ -191,19 +202,36 @@ Do not add extra people, duplicate limbs, extra fingers, distorted anatomy or ex
 }
 
 function buildFlatLay(){
-  $('flatOutput').value=`Professional photorealistic flat lay clothing display of ${v('clothes')||'a complete coordinated outfit'}.
+  const useReference = v('flatReference') === 'yes';
 
-Arrange every garment neatly on an identical flat seamless ${v('flatBg')||'mid-grey'} studio background, exact color ${v('flatHex')||'#8A8A8A'}, viewed directly from above.
+  const referenceInstruction = useReference
+    ? `Use the uploaded character sheet or character image as the primary identity and wardrobe reference. The uploaded image belongs to the exact same character. Do not copy the person’s face, body, pose or background into the output. Extract and display only the clothing, shoes and specified accessories as a flat lay.`
+    : `Create the outfit entirely from the written description. Do not include a person, model, mannequin or any human body part.`;
 
-Style and concept: ${v('clothingStyle')||'clean contemporary fashion styling'}.
-Colours and materials: ${v('fabric')||'realistic fabric texture and material detail'}.
-Accessories: ${v('flatAccessories')||'none'}.
+  const characterNote = v('flatCharacterNote')
+    ? `Character context: ${v('flatCharacterNote')}. Use this only to guide the fashion direction.`
+    : '';
+
+  $('flatOutput').value=`Professional photorealistic flat lay clothing display.
+
+${referenceInstruction}
+
+${characterNote}
+
+OUTFIT:
+${v('clothes') || 'A complete coordinated outfit based on the uploaded character reference.'}
+
+Style and concept: ${v('clothingStyle') || 'Use the character reference or a clean contemporary fashion direction'}.
+Colours and materials: ${v('fabric') || 'Use realistic fabric texture, material detail and accurate garment construction'}.
+Accessories: ${v('flatAccessories') || 'Only include accessories that belong to the outfit or are specified'}.
+
+Arrange every garment neatly on an identical flat seamless ${v('flatBg') || 'mid-grey'} studio background, exact color ${v('flatHex') || '#8A8A8A'}, viewed directly from above.
 
 Create an authentic fashion catalog presentation. Keep every garment fully visible, evenly spaced and naturally arranged. Show realistic fabric texture, precise folds, stitching, seams, zippers, buttons and subtle realistic shadows. Clean sharp studio product photography, no colour grading.
 
-NO ${v('flatNegative')||'person, model, mannequin, body, head, face, hands, arms, legs, feet, hanger, clothing rack, text, logo, watermark'}.
+NO ${v('flatNegative') || 'person, model, mannequin, body, head, face, hands, arms, legs, feet, hanger, clothing rack, text, logo, watermark'}.
 
-High-detail realistic flat lay fashion product shot, direct overhead camera angle, clean composition, ${v('flatRatio')||'4:5 vertical'} composition.`;
+High-detail realistic flat lay fashion product shot, direct overhead camera angle, clean composition, ${v('flatRatio') || '4:5 vertical'} composition.`;
 }
 </script>
 </body>
